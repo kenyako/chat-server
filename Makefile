@@ -10,13 +10,13 @@ get-deps:
 
 
 generate:
-	make generate-chat-api
+	make generate-chat-server
 
-generate-auth-api:
+generate-chat-server:
 	mkdir -p pkg/chat_v1
 	protoc --proto_path api/chat_v1 \
 	--go_out=pkg/chat_v1 --go_opt=paths=source_relative \
 	--plugin=protoc-gen-go=bin/protoc-gen-go \
 	--go-grpc_out=pkg/chat_v1 --go-grpc_opt=paths=source_relative \
 	--plugin=protoc-gen-go-grpc=bin/protoc-gen-go-grpc \
-	api/chat_v1/note.proto
+	api/chat_v1/chat.proto
