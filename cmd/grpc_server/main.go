@@ -29,7 +29,6 @@ func (s *server) Create(ctx context.Context, req *desc.CreateRequest) (*desc.Cre
 }
 
 func (s *server) Delete(ctx context.Context, req *desc.DeleteRequest) (*emptypb.Empty, error) {
-	log.Printf("delete chat with ID: %d", req.GetId())
 
 	err := deleteChat(req.GetId())
 	if err != nil {
@@ -47,6 +46,7 @@ func (s *server) SendMessage(ctx context.Context, req *desc.SendRequest) (*empty
 }
 
 func deleteChat(chatID int64) error {
+	log.Printf("delete chat with ID: %d", chatID)
 
 	return nil
 }
