@@ -29,7 +29,7 @@ func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 
-	r, err := c.Create(ctx, &desc.CreateRequest{Usernames: usernames})
+	r, err := c.Create(ctx, &desc.CreateRequest{Usernames: usernames, Title: "Best"})
 	if err != nil {
 		log.Fatalf("failed to create chat: %v", err)
 	}
