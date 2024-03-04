@@ -5,17 +5,17 @@ create table chats (
 );
 
 create table users_chats (
-    id bigserial primary key,
-    name text not null,
-    password text not null,
-    email text not null
+    chat_id bigserial references chats(id),
+    user_id bigint,
+
+    primary key (chat_id, user_id)
 );
 
 create table chat_messages (
     id bigserial primary key,
     chat_id bigint references chats(id),
-    user_id bigint references users_chats(id),
-    text_mes text not null,
+    user_id bigint,
+    text text not null,
     time_sent timestamp not null
 );
 
