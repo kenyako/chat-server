@@ -6,6 +6,7 @@ import (
 
 	"github.com/kenyako/chat-server/internal/client/db"
 	"github.com/kenyako/chat-server/internal/client/db/pg"
+	"github.com/kenyako/chat-server/internal/client/db/transaction"
 	"github.com/kenyako/chat-server/internal/closer"
 	"github.com/kenyako/chat-server/internal/config"
 	"github.com/kenyako/chat-server/internal/config/env"
@@ -21,7 +22,8 @@ type serviceProvider struct {
 	pgConfig   config.PGConfig
 	grpcConfig config.GRPCConfig
 
-	dbClient db.Client
+	dbClient  db.Client
+	txManager db.TxManager
 
 	chatRepository repository.ChatAPIRepo
 	chatService    service.ChatAPIService
@@ -84,6 +86,16 @@ func (s *serviceProvider) DBCClient(ctx context.Context) db.Client {
 	return s.dbClient
 }
 
+func (s *serviceProvider) TxManager(ctx context.Context) db.TxManager {
+
+	if s.txManager == nil {
+
+		s.txManager = transaction.NewTransactionManager(s.DBCClient(ctx).DB())
+	}
+
+	return s.txManager
+}
+
 func (s *serviceProvider) ChatRepository(ctx context.Context) repository.ChatAPIRepo {
 
 	if s.chatRepository == nil {
@@ -98,7 +110,10 @@ func (s *serviceProvider) ChatService(ctx context.Context) service.ChatAPIServic
 
 	if s.chatService == nil {
 
-		s.chatService = chatServ.NewServiceChat(s.ChatRepository(ctx))
+		s.chatService = chatServ.NewServiceChat(
+			s.ChatRepository(ctx),
+			s.TxManager(ctx),
+		)
 	}
 
 	return s.chatService
