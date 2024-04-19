@@ -6,8 +6,8 @@ import (
 
 	sq "github.com/Masterminds/squirrel"
 	"github.com/brianvoe/gofakeit"
-	"github.com/kenyako/chat-server/internal/client/db"
 	"github.com/kenyako/chat-server/internal/model"
+	"github.com/kenyako/platform_common/pkg/postgres"
 )
 
 func (r *repo) Create(ctx context.Context, info *model.CreateChat) (int64, error) {
@@ -22,7 +22,7 @@ func (r *repo) Create(ctx context.Context, info *model.CreateChat) (int64, error
 		log.Fatalf("failed to build query: %v", err)
 	}
 
-	q := db.Query{
+	q := postgres.Query{
 		Name:     "chat_repository.Create",
 		QueryRaw: query,
 	}
@@ -51,7 +51,7 @@ func (r *repo) Create(ctx context.Context, info *model.CreateChat) (int64, error
 		log.Fatalf("failed to build query: %v", err)
 	}
 
-	q = db.Query{
+	q = postgres.Query{
 		QueryRaw: query,
 	}
 

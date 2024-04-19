@@ -4,7 +4,7 @@ import (
 	"context"
 
 	sq "github.com/Masterminds/squirrel"
-	"github.com/kenyako/chat-server/internal/client/db"
+	"github.com/kenyako/platform_common/pkg/postgres"
 )
 
 func (r *repo) Delete(ctx context.Context, id int64) error {
@@ -17,7 +17,7 @@ func (r *repo) Delete(ctx context.Context, id int64) error {
 		return err
 	}
 
-	q := db.Query{
+	q := postgres.Query{
 		Name:     "chat_repository.Delete",
 		QueryRaw: query,
 	}
@@ -35,7 +35,7 @@ func (r *repo) Delete(ctx context.Context, id int64) error {
 		return err
 	}
 
-	q = db.Query{
+	q = postgres.Query{
 		QueryRaw: query,
 	}
 
@@ -52,7 +52,7 @@ func (r *repo) Delete(ctx context.Context, id int64) error {
 		return err
 	}
 
-	q = db.Query{
+	q = postgres.Query{
 		QueryRaw: query,
 	}
 

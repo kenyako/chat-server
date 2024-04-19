@@ -5,8 +5,8 @@ import (
 	"time"
 
 	sq "github.com/Masterminds/squirrel"
-	"github.com/kenyako/chat-server/internal/client/db"
 	"github.com/kenyako/chat-server/internal/model"
+	"github.com/kenyako/platform_common/pkg/postgres"
 )
 
 func (r *repo) SendMessage(ctx context.Context, info *model.SendMessageRequest) error {
@@ -20,7 +20,7 @@ func (r *repo) SendMessage(ctx context.Context, info *model.SendMessageRequest) 
 		return err
 	}
 
-	q := db.Query{
+	q := postgres.Query{
 		Name:     "chat_repository.SendMessage",
 		QueryRaw: query,
 	}

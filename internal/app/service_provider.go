@@ -4,14 +4,12 @@ import (
 	"context"
 	"log"
 
-	"github.com/kenyako/chat-server/internal/client/db"
-	"github.com/kenyako/chat-server/internal/client/db/pg"
-	"github.com/kenyako/chat-server/internal/client/db/transaction"
-	"github.com/kenyako/chat-server/internal/closer"
 	"github.com/kenyako/chat-server/internal/config"
 	"github.com/kenyako/chat-server/internal/config/env"
 	"github.com/kenyako/chat-server/internal/repository"
 	"github.com/kenyako/chat-server/internal/service"
+	"github.com/kenyako/platform_common/pkg/closer"
+	"github.com/kenyako/platform_common/pkg/postgres"
 
 	chatAPI "github.com/kenyako/chat-server/internal/api/chat"
 	chatRepo "github.com/kenyako/chat-server/internal/repository/chat"
@@ -22,8 +20,8 @@ type serviceProvider struct {
 	pgConfig   config.PGConfig
 	grpcConfig config.GRPCConfig
 
-	dbClient  db.Client
-	txManager db.TxManager
+	dbClient  postgres.Client
+	txManager postgres.TxManager
 
 	chatRepository repository.ChatAPIRepo
 	chatService    service.ChatAPIService
@@ -65,11 +63,11 @@ func (s *serviceProvider) GRPCConfig() config.GRPCConfig {
 	return s.grpcConfig
 }
 
-func (s *serviceProvider) DBCClient(ctx context.Context) db.Client {
+func (s *serviceProvider) DBCClient(ctx context.Context) postgres.Client {
 
 	if s.dbClient == nil {
 
-		client, err := pg.New(ctx, s.PGConfig().DSN())
+		client, err := postgres.NewClient(ctx, s.PGConfig().DSN())
 		if err != nil {
 			log.Fatalf("failed to create dbc client: %v", err)
 		}
@@ -86,11 +84,11 @@ func (s *serviceProvider) DBCClient(ctx context.Context) db.Client {
 	return s.dbClient
 }
 
-func (s *serviceProvider) TxManager(ctx context.Context) db.TxManager {
+func (s *serviceProvider) TxManager(ctx context.Context) postgres.TxManager {
 
 	if s.txManager == nil {
 
-		s.txManager = transaction.NewTransactionManager(s.DBCClient(ctx).DB())
+		s.txManager = postgres.NewTransactionManager(s.DBCClient(ctx).DB())
 	}
 
 	return s.txManager

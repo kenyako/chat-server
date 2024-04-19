@@ -1,8 +1,8 @@
 package chatrepo
 
 import (
-	"github.com/kenyako/chat-server/internal/client/db"
 	"github.com/kenyako/chat-server/internal/repository"
+	"github.com/kenyako/platform_common/pkg/postgres"
 )
 
 const (
@@ -29,10 +29,10 @@ const (
 )
 
 type repo struct {
-	db db.Client
+	db postgres.Client
 }
 
-func NewRepository(db db.Client) repository.ChatAPIRepo {
+func NewRepository(db postgres.Client) repository.ChatAPIRepo {
 
 	return &repo{
 		db: db,
